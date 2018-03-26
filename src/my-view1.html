@@ -1,0 +1,81 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="redux-config/redux-mixin.html">
+<link rel="import" href="components/loading-spinner.html">
+
+<dom-module id="my-view1">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+
+                padding: 10px;
+            }
+        </style>
+
+        <div class="card">
+            <iron-image
+                style="background-color: lightgray;"
+                preload
+                src="https://d1re4mvb3lawey.cloudfront.net/pg1017/cover.jpg"
+                title="[[title]]"
+                alt="`title ${title}`"
+            >
+            </iron-image>
+            <loading-spinner show="[[loading]]"></loading-spinner>
+            <h3>{{isbn}}</h3>
+            <h1>{{title}}</h1>
+            <p>{{contributors}}</p>
+            <span>{{date}}</span>
+        </div>
+    </template>
+
+    <script>
+        class MyView1 extends MyApp.ReduxMixin(Polymer.Element) {
+            static get is() {
+                return 'my-view1';
+            }
+            static get properties() {
+                return {
+                    isbn: {
+                        type: String,
+                        statePath: 'bookDetails.details.isbn'
+                    },
+                    title: {
+                        type: String,
+                        statePath: 'bookDetails.details.title'
+                    },
+                    contributors: {
+                        type: String,
+                        statePath: 'bookDetails.details.contributors'
+                    },
+                    date: {
+                        type: Number,
+                        statePath: 'bookDetails.details.date'
+                    },
+                    loading: {
+                        type: Boolean,
+                        statePath: 'bookDetails.loading'
+                    }
+                };
+            }
+            ready () {
+                super.ready();
+                this.dispatch('getBook');
+            }
+        }
+
+        window.customElements.define(MyView1.is, MyView1);
+    </script>
+</dom-module>

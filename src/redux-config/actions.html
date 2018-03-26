@@ -1,0 +1,38 @@
+<script src="../../data/book-data.js"></script>
+
+<script>
+    (function () {
+        function updateLoading (loading) {
+            return {
+                type: 'UPDATE_LOADING',
+                payload: loading
+            }
+        }
+        function fetchBook () {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(data);
+                }, 500);
+            })
+        }
+        function updateBookDetails (details) {
+            return {
+                type: 'UPDATE_BOOK_DETAIL',
+                payload: details
+            }
+        }
+        function getBook () {
+            return function (dispatch) {
+                dispatch(updateLoading(true));
+                return fetchBook()
+                    .then(res => {
+                        dispatch(updateLoading(false));
+                        dispatch(updateBookDetails(res))
+                    });
+            };
+        }
+        MyApp.actions = {
+            getBook
+        }
+    })();
+</script>
